@@ -3,7 +3,6 @@
 #include <vector>
 #include <random>
 #include <conio.h>
-#include <time.h>
 #include <string>
 
 using namespace std;
@@ -179,7 +178,7 @@ namespace ocean_life
 	public:
 		Plankton()
 		{
-			hp_max = 15; hp = hp_max;
+			hp_max = 3; hp = hp_max;
 			moves = 1;
 			age = 0;
 		}
@@ -199,16 +198,20 @@ namespace ocean_life
 
 		int* find_empty_cell(bool isPlankton);
 
+		void Plankton_move(Plankton* p_obj);
+
+		void Plankton_replicate(Plankton* p_obj);
+
+		void Plankton_age(Plankton* o_obj, int order);
+
+		int empty_place(int x, int y, bool isPlankton);
+
 	public:
 		Ocean_master(int width_inp, int height_inp)
 		{
 			srand(time(0));
 			ocean_table = new Ocean_field(width_inp, height_inp);
 		}
-
-		void Plankton_move(Plankton* p_obj);
-
-		//void Plankton_replicate(Plankton* p_obj);
 
 		void Tick();
 
@@ -217,7 +220,5 @@ namespace ocean_life
 		void start_random_place();
 
 		void UpdateMap();
-
-		int empty_place(int x, int y, bool isPlankton);
 	};
 }

@@ -74,11 +74,25 @@ int* Ocean_master::find_empty_cell(bool isPlankton)
 void Ocean_master::Tick()
 {
 	system("cls");
+	int plankton_count = fish_plankton.size();
 
-	for (int i = 0; i < fish_plankton.size(); i++)
+
+	//PLANKTON MOVES
+	for (int i = 0; i < plankton_count; i++)
 	{
 		Plankton_move(&fish_plankton[i]);
 	}
+	for (int i = 0; i < plankton_count; i++)
+	{
+		Plankton_replicate(&fish_plankton[i]);
+	}
+	for (int i = plankton_count - 1; i >= 0; i--)
+	{
+		Plankton_age(&fish_plankton[i], i);
+	}
+
+
+
 
 
 	UpdateMap();
@@ -315,6 +329,8 @@ void Ocean_master::UpdateMap()
 
 }
 
+//PLANKTON PHASE
+
 void Ocean_master::Plankton_move(Plankton* p_obj)
 {
 	int x = p_obj->location[0], y = p_obj->location[1], index = 0;
@@ -388,129 +404,158 @@ void Ocean_master::Plankton_move(Plankton* p_obj)
 
 }
 
-/*void Ocean_master::Plankton_replicate(Plankton* p_obj)
-{
+void Ocean_master::Plankton_replicate(Plankton* p_obj)
+{	
 	int x = p_obj->location[0], y = p_obj->location[1];
 	int direction = rand() % 4 + 1; //1 - up, 2 - down, 3 - right, 4 - left
+	int index_plankton, index;
+	int current_width = ocean_table->get_width(), 
+		current_height = ocean_table->get_height(), 
+		variations = 0;
 
 	//REPLICATING PHASE
 
-	while (true)
+	while (variations < current_width * current_height)
 	{
 		if (direction == 1)
 		{
-			if (empty_place(x, y - 1, 1) != -1) //if there is no plankton in this direction
+			index_plankton = empty_place(x, y - 1, 1);
+			index = empty_place(x, y - 1, 0);
+			if (index_plankton != -1) //if there is no plankton in this direction
 			{
 				Plankton p_child;
 				p_child.location[0] = x;
 				p_child.location[1] = y - 1;
-				p_child.location[2] = empty_place(x, y - 1, 1);
+				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
 				break;
 			}
-			if (empty_place(x, y - 1, 1) == -1 && empty_place(x, y - 1, 0) != -1) //if there is plankton in this direction
+			if (index_plankton == -1 && index != -1) //if there is plankton in this direction
 			{
 				for (int i = 0; i < fish_plankton.size(); i++)
 				{
 					if (fish_plankton[i].location[0] == x && fish_plankton[i].location[1] == y - 1)
 					{
-						fish_plankton[i].hp = 15;
+						fish_plankton[i].hp = fish_plankton[i].hp_max;
 					}
 				}
 				break;
 			}
-			if (empty_place(x, y - 1, 0) == -1)
+			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
 				continue;
 			}
 		}
+
 		if (direction == 2)
 		{
-			if (empty_place(x, y + 1, 1) != -1) //if there is no plankton in this direction
+			index_plankton = empty_place(x, y + 1, 1);
+			index = empty_place(x, y + 1, 0);
+			if (index_plankton != -1) //if there is no plankton in this direction
 			{
 				Plankton p_child;
 				p_child.location[0] = x;
 				p_child.location[1] = y + 1;
-				p_child.location[2] = empty_place(x, y + 1, 1);
+				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
 				break;
 			}
-			if (empty_place(x, y + 1, 1) == -1 && empty_place(x, y + 1, 0) != -1) //if there is plankton in this direction
+			if (index_plankton == -1 && index != -1) //if there is plankton in this direction
 			{
 				for (int i = 0; i < fish_plankton.size(); i++)
 				{
 					if (fish_plankton[i].location[0] == x && fish_plankton[i].location[1] == y + 1)
 					{
-						fish_plankton[i].hp = 15;
+						fish_plankton[i].hp = fish_plankton[i].hp_max;
 					}
 				}
 				break;
 			}
-			if (empty_place(x, y + 1, 0) == -1)
+			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
 				continue;
 			}
 		}
+
 		if (direction == 3)
 		{
-			if (empty_place(x + 1, y, 1) != -1) //if there is no plankton in this direction
+			index_plankton = empty_place(x + 1, y, 1);
+			index = empty_place(x + 1, y, 0);
+			if (index_plankton != -1) //if there is no plankton in this direction
 			{
 				Plankton p_child;
 				p_child.location[0] = x + 1;
 				p_child.location[1] = y;
-				p_child.location[2] = empty_place(x + 1, y, 1);
+				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
 				break;
 			}
-			if (empty_place(x + 1, y, 1) == -1 && empty_place(x + 1, y, 0) != -1) //if there is plankton in this direction
+			if (index_plankton == -1 && index != -1) //if there is plankton in this direction
 			{
 				for (int i = 0; i < fish_plankton.size(); i++)
 				{
 					if (fish_plankton[i].location[0] == x + 1 && fish_plankton[i].location[1] == y)
 					{
-						fish_plankton[i].hp = 15;
+						fish_plankton[i].hp = fish_plankton[i].hp_max;
 					}
 				}
 				break;
 			}
-			if (empty_place(x + 1, y, 0) == -1)
+			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
 				continue;
 			}
 		}
+
 		if (direction == 4)
 		{
-			if (empty_place(x - 1, y, 1) != -1) //if there is no plankton in this direction
+			index_plankton = empty_place(x - 1, y, 1);
+			index = empty_place(x - 1, y, 0);
+			if (index_plankton != -1) //if there is no plankton in this direction
 			{
 				Plankton p_child;
 				p_child.location[0] = x - 1;
 				p_child.location[1] = y;
-				p_child.location[2] = empty_place(x - 1, y, 1);
+				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
 				break;
 			}
-			if (empty_place(x - 1, y, 1) == -1 && empty_place(x - 1, y, 0) != -1) //if there is plankton in this direction
+			if (index_plankton == -1 && index != -1) //if there is plankton in this direction but the space is ready
 			{
 				for (int i = 0; i < fish_plankton.size(); i++)
 				{
-					if (fish_plankton[i].location[0] == x + 1 && fish_plankton[i].location[1] == y)
+					if (fish_plankton[i].location[0] == x - 1 && fish_plankton[i].location[1] == y)
 					{
-						fish_plankton[i].hp = 15;
+						fish_plankton[i].hp = fish_plankton[i].hp_max;
 					}
 				}
 				break;
 			}
-			if (empty_place(x - 1, y, 0) == -1)
+			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
 				continue;
 			}
 		}
+
+		variations++;
 	}
-}*/
+}
+
+void Ocean_master::Plankton_age(Plankton* p_obj, int order)
+{
+	p_obj->age++;
+	p_obj->hp--;
+	if (p_obj->hp <= 0)
+	{
+		fish_plankton.erase(fish_plankton.begin() + order);
+	}
+}
+
+//CLOWNFISH PHASE
 
 int Ocean_master::empty_place(int x1, int y1, bool isPlankton)
 {
