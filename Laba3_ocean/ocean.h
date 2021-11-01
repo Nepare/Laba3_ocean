@@ -63,24 +63,24 @@ namespace ocean_life
 		int location[3];
 	};
 
-	class Passive : public Organism
+		class Passive : public Organism
 	{
 
 	};
 
-	class Aggressive : public Organism
-	{
-	public:
-		int damage;
-	};
-
-	class Neutral : public Organism
+		class Aggressive : public Organism
 	{
 	public:
 		int damage;
 	};
 
-	class Whale : public Passive
+		class Neutral : public Organism
+	{
+	public:
+		int damage;
+	};
+
+			class Whale : public Passive
 	{
 	public:
 		Whale(string sex)
@@ -94,8 +94,8 @@ namespace ocean_life
 			if (sex == "Random") isMale = rand() % 2;
 		}
 	};
-
-	class Dolphin : public Neutral
+		
+			class Dolphin : public Neutral
 	{
 	public:
 		Dolphin(string sex)
@@ -110,8 +110,8 @@ namespace ocean_life
 			if (sex == "Random") isMale = rand() % 2;
 		}
 	};
-
-	class Killerwhale : public Aggressive
+	
+			class Killerwhale : public Aggressive
 	{
 	public:
 		Killerwhale(string sex)
@@ -126,8 +126,8 @@ namespace ocean_life
 			if (sex == "Random") isMale = rand() % 2;
 		}
 	};
-
-	class Shark : public Aggressive
+	
+			class Shark : public Aggressive
 	{
 	public:
 		Shark(string sex)
@@ -143,7 +143,7 @@ namespace ocean_life
 		}
 	};
 
-	class Clownfish : public Passive
+			class Clownfish : public Passive
 	{
 	public:
 		Clownfish(string sex)
@@ -158,7 +158,7 @@ namespace ocean_life
 		}
 	};
 
-	class Fugu : public Passive
+			class Fugu : public Passive
 	{
 	public:
 		Fugu(string sex)
@@ -173,7 +173,7 @@ namespace ocean_life
 		}
 	};
 
-	class Plankton : public Organism
+			class Plankton : public Organism
 	{
 	public:
 		Plankton()
@@ -195,14 +195,29 @@ namespace ocean_life
 		vector<Clownfish> fish_clownfish;
 		vector<Fugu> fish_fugu;
 		vector<Plankton> fish_plankton;
+		Plankton* p_extra = new Plankton();
 
 		int* find_empty_cell(bool isPlankton);
+
+		//PLANKTON
 
 		void Plankton_move(Plankton* p_obj);
 
 		void Plankton_replicate(Plankton* p_obj);
 
 		void Plankton_age(Plankton* o_obj, int order);
+
+		//CLOWNFISH
+
+		void Clownfish_move(Clownfish* c_obj);
+
+		void Clownfish_eat(Clownfish* c_obj);
+
+		void Clownfish_replicate(Clownfish* c_obj);
+
+		void Clownfish_age(Clownfish* c_obj, int order);
+
+		Plankton& return_plankton(int x, int y);
 
 		int empty_place(int x, int y, bool isPlankton);
 

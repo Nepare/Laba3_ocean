@@ -74,24 +74,42 @@ int* Ocean_master::find_empty_cell(bool isPlankton)
 void Ocean_master::Tick()
 {
 	system("cls");
-	int plankton_count = fish_plankton.size();
+	int i=0,
+		plankton_count = fish_plankton.size(),
+		clownfish_count = fish_clownfish.size();
+	
 
-
-	//PLANKTON MOVES
-	for (int i = 0; i < plankton_count; i++)
+	// PLANKTON MOVES
+	for (i = 0; i < plankton_count; i++)
 	{
 		Plankton_move(&fish_plankton[i]);
 	}
-	for (int i = 0; i < plankton_count; i++)
+	for (i = 0; i < plankton_count; i++)
 	{
 		Plankton_replicate(&fish_plankton[i]);
 	}
-	for (int i = plankton_count - 1; i >= 0; i--)
+	for (i = plankton_count - 1; i >= 0; i--)
 	{
 		Plankton_age(&fish_plankton[i], i);
 	}
 
-
+	// CLOWNFISH MOVES
+	for (i = 0; i < clownfish_count; i++)
+	{
+		for (int j = 0; j < fish_clownfish[i].moves; j++)
+		{
+			Clownfish_move(&fish_clownfish[i]);
+		}
+	}
+	for (i = 0; i < clownfish_count; i++)
+	{
+		Clownfish_eat(&fish_clownfish[i]);
+	}
+	//REPLICATING PHASE MISSING RN
+	for (i = clownfish_count - 1; i >= 0; i--)
+	{
+		Clownfish_age(&fish_clownfish[i], i);
+	}
 
 
 
@@ -329,7 +347,7 @@ void Ocean_master::UpdateMap()
 
 }
 
-//PLANKTON PHASE
+// PLANKTON PHASE
 
 void Ocean_master::Plankton_move(Plankton* p_obj)
 {
@@ -555,7 +573,152 @@ void Ocean_master::Plankton_age(Plankton* p_obj, int order)
 	}
 }
 
-//CLOWNFISH PHASE
+// CLOWNFISH PHASE
+
+void Ocean_master::Clownfish_move(Clownfish* c_obj)
+{
+	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
+	int direction = rand() % 4 + 1; //1 - up, 2 - down, 3 - right, 4 - left
+	int variations = 0,
+		current_width = ocean_table->get_width(),
+		current_height = ocean_table->get_height();
+
+	//CHECKING IF PLANKTON IS RIGHT THERE
+	Plankton p_obj = return_plankton(x, y); 
+	if (p_obj.location[0] == x && p_obj.location[1] == y)
+	{
+		return;
+	}
+
+	//MOVING PHASE
+
+	while (variations < current_width * current_height)
+	{
+		if (direction == 1)
+		{
+			index = empty_place(x, y - 1, 0);
+			if (index != -1) //the place is busy
+			{
+				c_obj->location[1] = y - 1;
+				c_obj->location[2] = index;
+				break;
+			}
+			else
+			{
+				direction = rand() % 4 + 1;
+			}
+		}
+		if (direction == 2)
+		{
+			index = empty_place(x, y + 1, 0);
+			if (index != -1)
+			{
+				c_obj->location[1] = y + 1;
+				c_obj->location[2] = index;
+				break;
+			}
+			else
+			{
+				direction = rand() % 4 + 1;
+			}
+		}
+		if (direction == 3)
+		{
+			index = empty_place(x + 1, y, 0);
+			if (index != -1)
+			{
+				c_obj->location[0] = x + 1;
+				c_obj->location[2] = index;
+				break;
+			}
+			else
+			{
+				direction = rand() % 4 + 1;
+			}
+		}
+		if (direction == 4)
+		{
+			index = empty_place(x - 1, y, 0);
+			if (index != -1)
+			{
+				c_obj->location[0] = x - 1;
+				c_obj->location[2] = index;
+				break;
+			}
+			else
+			{
+				direction = rand() % 4 + 1;
+			}
+		}
+		variations++;
+	}
+
+}
+
+void Ocean_master::Clownfish_eat(Clownfish* c_obj)
+{
+	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
+	Plankton p_obj = return_plankton(x, y);
+	int x_plankton = p_obj.location[0],
+		y_plankton = p_obj.location[1];
+
+	if(p_obj.location[0] == -1 || p_obj.location[1] == -1)
+	{
+		return;
+	}
+
+	if (x_plankton == x && y_plankton == y)
+	{
+		for (int i = 0; i < fish_plankton.size(); i++)
+		{
+			if (fish_plankton[i].location[0] == x_plankton && fish_plankton[i].location[1] == y_plankton)
+			{
+				c_obj->food += fish_plankton[i].hp_max;
+				if (c_obj->food > c_obj->food_max) { c_obj->food = c_obj->food_max; }
+				fish_plankton.erase(fish_plankton.begin() + i);
+			} //Killing plankton, replenishing amount of food corresponding to plankton's max hp
+		}
+	}
+}
+
+void Ocean_master::Clownfish_replicate(Clownfish* c_obj)
+{
+	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
+	
+	// the clownfish checks if there is one of another sex in this or neighbouring cell
+	// if there is one, then it checks if both have 50%+ of food (5+)
+	// if this is so, a baby of random sex spawns in the cell of this clownfish
+	// both parents lose 2 food points
+}
+
+void Ocean_master::Clownfish_age(Clownfish* c_obj, int order)
+{
+	c_obj->age++;
+	c_obj->hp--;
+	c_obj->food--;
+
+	if (c_obj->food <= 0)
+	{
+		c_obj->hp -= 3;
+	}
+	if (c_obj->hp <= 0)
+	{
+		fish_clownfish.erase(fish_clownfish.begin() + order);
+	}
+}
+
+Plankton& Ocean_master::return_plankton(int x1, int y1)
+{
+	for (int i = 0; i < fish_plankton.size(); i++)
+	{
+		if (fish_plankton[i].location[0] == x1 && fish_plankton[i].location[1] == y1)
+		{
+			return fish_plankton[i];
+		}
+	}
+	p_extra->location[0] = -1; p_extra->location[1] = -1; p_extra->location[2] = -1;
+	return *p_extra;
+}
 
 int Ocean_master::empty_place(int x1, int y1, bool isPlankton)
 {
