@@ -89,6 +89,7 @@ namespace ocean_life
 			food_max = 300; food = food_max;
 			moves = 2;
 			age = 0;
+			type = 'W';
 			if (sex == "Male") isMale = true;
 			if (sex == "Female") isMale = false;
 			if (sex == "Random") isMale = rand() % 2;
@@ -105,6 +106,7 @@ namespace ocean_life
 			moves = 5;
 			damage = 25;
 			age = 0;
+			type = 'D';
 			if (sex == "Male") isMale = true;
 			if (sex == "Female") isMale = false;
 			if (sex == "Random") isMale = rand() % 2;
@@ -121,6 +123,7 @@ namespace ocean_life
 			moves = 4;
 			damage = 50;
 			age = 0;
+			type = 'K';
 			if (sex == "Male") isMale = true;
 			if (sex == "Female") isMale = false;
 			if (sex == "Random") isMale = rand() % 2;
@@ -137,6 +140,7 @@ namespace ocean_life
 			moves = 4;
 			damage = 40;
 			age = 0;
+			type = 'S';
 			if (sex == "Male") isMale = true;
 			if (sex == "Female") isMale = false;
 			if (sex == "Random") isMale = rand() % 2;
@@ -152,6 +156,7 @@ namespace ocean_life
 			food_max = 10; food = food_max;
 			moves = 3;
 			age = 0;
+			type = 'C';
 			if (sex == "Male") isMale = true;
 			if (sex == "Female") isMale = false;
 			if (sex == "Random") isMale = rand() % 2;
@@ -167,6 +172,7 @@ namespace ocean_life
 			food_max = 10; food = food_max;
 			moves = 3;
 			age = 0;
+			type = 'F';
 			if (sex == "Male") isMale = true;
 			if (sex == "Female") isMale = false;
 			if (sex == "Random") isMale = rand() % 2;
@@ -181,6 +187,7 @@ namespace ocean_life
 			hp_max = 3; hp = hp_max;
 			moves = 1;
 			age = 0;
+			type = 'P';
 		}
 	};
 
@@ -207,15 +214,15 @@ namespace ocean_life
 
 		void Plankton_age(Plankton* o_obj, int order);
 
-		//CLOWNFISH
+		//PASSIVES
 
-		void Clownfish_move(Clownfish* c_obj);
+		void Passive_move(Passive* c_obj);
 
-		void Clownfish_eat(Clownfish* c_obj);
+		void Passive_eat(Passive* c_obj);
 
-		void Clownfish_replicate(Clownfish* c_obj);
+		void Passive_replicate(Passive* c_obj);
 
-		void Clownfish_age(Clownfish* c_obj, int order);
+		void Passive_age(Passive* c_obj, int order);
 
 		Plankton& return_plankton(int x, int y);
 
@@ -232,7 +239,7 @@ namespace ocean_life
 
 		void Show();
 
-		void start_random_place();
+		void start_random_place(int, int, int, int, int, int, int);
 
 		void UpdateMap();
 	};

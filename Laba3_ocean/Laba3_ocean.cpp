@@ -13,7 +13,8 @@ int main()
 	srand(time(0));
 	Ocean_master ocean(12,5);
 
-	ocean.start_random_place();
+	ocean.start_random_place(4, 4, 4, 4, 6, 4, 9); 
+	//						 W  D  K  S  C  F  P
 	ocean.Show();
 
 	int move_count = 0;

@@ -76,7 +76,12 @@ void Ocean_master::Tick()
 	system("cls");
 	int i=0,
 		plankton_count = fish_plankton.size(),
-		clownfish_count = fish_clownfish.size();
+		clownfish_count = fish_clownfish.size(),
+		fugu_count = fish_fugu.size(),
+		whale_count = fish_whale.size(),
+		dolphin_count = fish_dolphin.size(),
+		shark_count = fish_shark.size(),
+		killerwhale_count = fish_killerwhale.size();
 	
 
 	// PLANKTON MOVES
@@ -98,17 +103,20 @@ void Ocean_master::Tick()
 	{
 		for (int j = 0; j < fish_clownfish[i].moves; j++)
 		{
-			Clownfish_move(&fish_clownfish[i]);
+			Passive_move(&fish_clownfish[i]);
 		}
 	}
 	for (i = 0; i < clownfish_count; i++)
 	{
-		Clownfish_eat(&fish_clownfish[i]);
+		Passive_eat(&fish_clownfish[i]);
 	}
-	//REPLICATING PHASE MISSING RN
+	for (i = 0; i < clownfish_count; i++)
+	{
+		Passive_replicate(&fish_clownfish[i]);
+	}
 	for (i = clownfish_count - 1; i >= 0; i--)
 	{
-		Clownfish_age(&fish_clownfish[i], i);
+		Passive_age(&fish_clownfish[i], i);
 	}
 
 
@@ -122,10 +130,10 @@ void Ocean_master::Show()
 	ocean_table->display_field();
 }
 
-void Ocean_master::start_random_place()
+void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_c, int f_c, int p_c)
 {
 	// number of mobs
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= w_c; i++)
 	{
 		if (i % 2 != 0)
 		{
@@ -139,7 +147,7 @@ void Ocean_master::start_random_place()
 		}
 	}
 
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= d_c; i++)
 	{
 		if (i % 2 != 0)
 		{
@@ -153,7 +161,7 @@ void Ocean_master::start_random_place()
 		}
 	}
 
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= k_c; i++)
 	{
 		if (i % 2 != 0)
 		{
@@ -167,7 +175,7 @@ void Ocean_master::start_random_place()
 		}
 	}
 
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= s_c; i++)
 	{
 		if (i % 2 != 0)
 		{
@@ -181,7 +189,7 @@ void Ocean_master::start_random_place()
 		}
 	}
 
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= c_c; i++)
 	{
 		if (i % 2 != 0)
 		{
@@ -195,7 +203,7 @@ void Ocean_master::start_random_place()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < f_c; i++)
 	{
 		if (i % 2)
 		{
@@ -209,7 +217,7 @@ void Ocean_master::start_random_place()
 		}
 	}
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < p_c; i++)
 	{
 		Plankton fish_plankton_obj;
 		fish_plankton.push_back(fish_plankton_obj);
@@ -419,7 +427,7 @@ void Ocean_master::Plankton_move(Plankton* p_obj)
 		}
 		variations++;
 	}
-
+	ocean_table->scene[p_obj->location[0]][p_obj->location[1]][p_obj->location[2]] = 'P';
 }
 
 void Ocean_master::Plankton_replicate(Plankton* p_obj)
@@ -446,6 +454,7 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 				p_child.location[1] = y - 1;
 				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
+				ocean_table->scene[p_child.location[0]][p_child.location[1]][p_child.location[2]] = 'P';
 				break;
 			}
 			if (index_plankton == -1 && index != -1) //if there is plankton in this direction
@@ -477,6 +486,7 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 				p_child.location[1] = y + 1;
 				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
+				ocean_table->scene[p_child.location[0]][p_child.location[1]][p_child.location[2]] = 'P';
 				break;
 			}
 			if (index_plankton == -1 && index != -1) //if there is plankton in this direction
@@ -508,6 +518,7 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 				p_child.location[1] = y;
 				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
+				ocean_table->scene[p_child.location[0]][p_child.location[1]][p_child.location[2]] = 'P';
 				break;
 			}
 			if (index_plankton == -1 && index != -1) //if there is plankton in this direction
@@ -539,6 +550,7 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 				p_child.location[1] = y;
 				p_child.location[2] = index_plankton;
 				fish_plankton.push_back(p_child);
+				ocean_table->scene[p_child.location[0]][p_child.location[1]][p_child.location[2]] = 'P';
 				break;
 			}
 			if (index_plankton == -1 && index != -1) //if there is plankton in this direction but the space is ready
@@ -569,13 +581,14 @@ void Ocean_master::Plankton_age(Plankton* p_obj, int order)
 	p_obj->hp--;
 	if (p_obj->hp <= 0)
 	{
+		ocean_table->scene[p_obj->location[0]][p_obj->location[1]][p_obj->location[2]] = ' ';
 		fish_plankton.erase(fish_plankton.begin() + order);
 	}
 }
 
-// CLOWNFISH PHASE
+// PASSIVE PHASE
 
-void Ocean_master::Clownfish_move(Clownfish* c_obj)
+void Ocean_master::Passive_move(Passive* c_obj)
 {
 	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
 	int direction = rand() % 4 + 1; //1 - up, 2 - down, 3 - right, 4 - left
@@ -652,10 +665,10 @@ void Ocean_master::Clownfish_move(Clownfish* c_obj)
 		}
 		variations++;
 	}
-
+	ocean_table->scene[c_obj->location[0]][c_obj->location[1]][c_obj->location[2]] = c_obj->type;
 }
 
-void Ocean_master::Clownfish_eat(Clownfish* c_obj)
+void Ocean_master::Passive_eat(Passive* c_obj)
 {
 	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
 	Plankton p_obj = return_plankton(x, y);
@@ -675,23 +688,54 @@ void Ocean_master::Clownfish_eat(Clownfish* c_obj)
 			{
 				c_obj->food += fish_plankton[i].hp_max;
 				if (c_obj->food > c_obj->food_max) { c_obj->food = c_obj->food_max; }
+				ocean_table->scene[fish_plankton[i].location[0]][fish_plankton[i].location[1]][fish_plankton[i].location[2]] = ' ';
 				fish_plankton.erase(fish_plankton.begin() + i);
 			} //Killing plankton, replenishing amount of food corresponding to plankton's max hp
 		}
 	}
 }
 
-void Ocean_master::Clownfish_replicate(Clownfish* c_obj)
+void Ocean_master::Passive_replicate(Passive* c_obj)
 {
-	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
-	
+	int x1 = c_obj->location[0], y1 = c_obj->location[1], index = 0;
+	int replica_result;
+
+	if (c_obj->food >= (c_obj->food_max) * 0.5)
+	{
+		for (int i = 0; i < fish_clownfish.size(); i++)
+		{
+			if (fish_clownfish[i].location[0] == x1 && fish_clownfish[i].location[1] == y1)
+			{
+				if (fish_clownfish[i].location[2] != c_obj->location[2]) //if they are not in the same sub-cell
+				{
+					if (c_obj->isMale == fish_clownfish[i].isMale) { return; }
+					replica_result = empty_place(x1, y1, 0);
+					if (replica_result == -1)
+					{
+						return;
+					}
+					else
+					{
+						c_obj->food -= c_obj->food_max * 0.3;
+						Clownfish c_child("Random");
+						c_child.location[0] = x1;
+						c_child.location[1] = y1;
+						c_child.location[2] = replica_result;
+						ocean_table->scene[c_child.location[0]][c_child.location[1]][c_child.location[2]] = 'C';
+						fish_clownfish.push_back(c_child);
+					}
+				}
+			}
+		}
+	}
+
 	// the clownfish checks if there is one of another sex in this or neighbouring cell
 	// if there is one, then it checks if both have 50%+ of food (5+)
 	// if this is so, a baby of random sex spawns in the cell of this clownfish
 	// both parents lose 2 food points
 }
 
-void Ocean_master::Clownfish_age(Clownfish* c_obj, int order)
+void Ocean_master::Passive_age(Passive* c_obj, int order)
 {
 	c_obj->age++;
 	c_obj->hp--;
@@ -703,9 +747,14 @@ void Ocean_master::Clownfish_age(Clownfish* c_obj, int order)
 	}
 	if (c_obj->hp <= 0)
 	{
+		ocean_table->scene[c_obj->location[0]][c_obj->location[1]][c_obj->location[2]] = ' ';
 		fish_clownfish.erase(fish_clownfish.begin() + order);
 	}
 }
+
+// NEUTRAL PHASE
+
+// AGGRESSIVE PHASE
 
 Plankton& Ocean_master::return_plankton(int x1, int y1)
 {
@@ -743,5 +792,6 @@ int Ocean_master::empty_place(int x1, int y1, bool isPlankton)
 			return i;
 		}
 	}
+
 	return -1;
 }
