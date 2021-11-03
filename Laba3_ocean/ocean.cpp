@@ -119,7 +119,26 @@ void Ocean_master::Tick()
 		Passive_age(&fish_clownfish[i], i);
 	}
 
-
+	// FUGU MOVES
+	for (i = 0; i < fugu_count; i++)
+	{
+		for (int j = 0; j < fish_fugu[i].moves; j++)
+		{
+			Passive_move(&fish_fugu[i]);
+		}
+	}
+	for (i = 0; i < fugu_count; i++)
+	{
+		Passive_eat(&fish_fugu[i]);
+	}
+	for (i = 0; i < fugu_count; i++)
+	{
+		Passive_replicate(&fish_fugu[i]);
+	}
+	for (i = fugu_count - 1; i >= 0; i--)
+	{
+		Passive_age(&fish_fugu[i], i);
+	}
 
 	UpdateMap();
 	Show();
@@ -471,7 +490,6 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
-				continue;
 			}
 		}
 
@@ -503,7 +521,6 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
-				continue;
 			}
 		}
 
@@ -535,7 +552,6 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
-				continue;
 			}
 		}
 
@@ -567,7 +583,6 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 			if (index == -1)
 			{
 				direction = rand() % 4 + 1;
-				continue;
 			}
 		}
 
@@ -700,39 +715,71 @@ void Ocean_master::Passive_replicate(Passive* c_obj)
 	int x1 = c_obj->location[0], y1 = c_obj->location[1], index = 0;
 	int replica_result;
 
-	if (c_obj->food >= (c_obj->food_max) * 0.5)
+	if (c_obj->type == 'C')
 	{
-		for (int i = 0; i < fish_clownfish.size(); i++)
+		if (c_obj->food >= (c_obj->food_max) * 0.5)
 		{
-			if (fish_clownfish[i].location[0] == x1 && fish_clownfish[i].location[1] == y1)
+			for (int i = 0; i < fish_clownfish.size(); i++)
 			{
-				if (fish_clownfish[i].location[2] != c_obj->location[2]) //if they are not in the same sub-cell
+				if (fish_clownfish[i].location[0] == x1 && fish_clownfish[i].location[1] == y1)
 				{
-					if (c_obj->isMale == fish_clownfish[i].isMale) { return; }
-					replica_result = empty_place(x1, y1, 0);
-					if (replica_result == -1)
+					if (fish_clownfish[i].location[2] != c_obj->location[2]) //if they are not in the same sub-cell
 					{
-						return;
-					}
-					else
-					{
-						c_obj->food -= c_obj->food_max * 0.3;
-						Clownfish c_child("Random");
-						c_child.location[0] = x1;
-						c_child.location[1] = y1;
-						c_child.location[2] = replica_result;
-						ocean_table->scene[c_child.location[0]][c_child.location[1]][c_child.location[2]] = 'C';
-						fish_clownfish.push_back(c_child);
+						if (c_obj->isMale == fish_clownfish[i].isMale) { return; }
+						replica_result = empty_place(x1, y1, 0);
+						if (replica_result == -1)
+						{
+							return;
+						}
+						else
+						{
+							c_obj->food -= c_obj->food_max * 0.3;
+							Clownfish c_child("Random");
+							c_child.location[0] = x1;
+							c_child.location[1] = y1;
+							c_child.location[2] = replica_result;
+							ocean_table->scene[c_child.location[0]][c_child.location[1]][c_child.location[2]] = 'C';
+							fish_clownfish.push_back(c_child);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	// the clownfish checks if there is one of another sex in this or neighbouring cell
-	// if there is one, then it checks if both have 50%+ of food (5+)
-	// if this is so, a baby of random sex spawns in the cell of this clownfish
-	// both parents lose 2 food points
+	if (c_obj->type == 'F')
+	{
+		if (c_obj->food >= (c_obj->food_max) * 0.5)
+		{
+			for (int i = 0; i < fish_fugu.size(); i++)
+			{
+				if (fish_fugu[i].location[0] == x1 && fish_fugu[i].location[1] == y1)
+				{
+					if (fish_fugu[i].location[2] != c_obj->location[2]) //if they are not in the same sub-cell
+					{
+						if (c_obj->isMale == fish_fugu[i].isMale) { return; }
+						replica_result = empty_place(x1, y1, 0);
+						if (replica_result == -1)
+						{
+							return;
+						}
+						else
+						{
+							c_obj->food -= c_obj->food_max * 0.3;
+							Fugu c_child("Random");
+							c_child.location[0] = x1;
+							c_child.location[1] = y1;
+							c_child.location[2] = replica_result;
+							ocean_table->scene[c_child.location[0]][c_child.location[1]][c_child.location[2]] = 'F';
+							fish_fugu.push_back(c_child);
+						}
+					}
+				}
+			}
+		}
+	}
+
+
 }
 
 void Ocean_master::Passive_age(Passive* c_obj, int order)
@@ -748,7 +795,18 @@ void Ocean_master::Passive_age(Passive* c_obj, int order)
 	if (c_obj->hp <= 0)
 	{
 		ocean_table->scene[c_obj->location[0]][c_obj->location[1]][c_obj->location[2]] = ' ';
-		fish_clownfish.erase(fish_clownfish.begin() + order);
+		if (c_obj->type == 'C')
+		{
+			fish_clownfish.erase(fish_clownfish.begin() + order);
+		}
+		if (c_obj->type == 'F')
+		{
+			fish_fugu.erase(fish_fugu.begin() + order);
+		}
+		if (c_obj->type == 'W')
+		{
+			fish_whale.erase(fish_whale.begin() + order);
+		}
 	}
 }
 
