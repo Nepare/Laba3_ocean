@@ -803,14 +803,12 @@ void Ocean_master::Passive_age(Passive* c_obj, int order)
 		{
 			fish_fugu.erase(fish_fugu.begin() + order);
 		}
-		if (c_obj->type == 'W')
-		{
-			fish_whale.erase(fish_whale.begin() + order);
-		}
 	}
 }
 
 // NEUTRAL PHASE
+
+
 
 // AGGRESSIVE PHASE
 

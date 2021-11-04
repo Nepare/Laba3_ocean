@@ -23,7 +23,8 @@ int main()
 		move_count++;
 		cout << "Move #" << move_count << endl;
 
-		_getch();
+		char input = _getch();
+		if (input == '\033') return 0; //if you press ESC, the program ends
 		ocean.Tick();
 	}
 }

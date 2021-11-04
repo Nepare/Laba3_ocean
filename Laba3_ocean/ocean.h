@@ -80,7 +80,7 @@ namespace ocean_life
 		int damage;
 	};
 
-			class Whale : public Passive
+			class Whale : public Neutral
 	{
 	public:
 		Whale(string sex)
@@ -212,7 +212,7 @@ namespace ocean_life
 
 		void Plankton_replicate(Plankton* p_obj);
 
-		void Plankton_age(Plankton* o_obj, int order);
+		void Plankton_age(Plankton* p_obj, int order);
 
 		//PASSIVES
 
@@ -223,6 +223,32 @@ namespace ocean_life
 		void Passive_replicate(Passive* c_obj);
 
 		void Passive_age(Passive* c_obj, int order);
+
+		//NEUTRALS
+
+		void Neutral_move(Neutral* c_obj);
+
+		void Neutral_attack(Neutral* c_obj);
+
+		void Neutral_eat(Neutral* c_obj);
+
+		void Neutral_replicate(Neutral* c_obj);
+
+		void Neutral_age(Neutral* c_obj);
+
+		//AGGRESSIVES
+
+		void Aggressive_move(Aggressive* c_obj);
+
+		void Aggressive_attack(Aggressive* c_obj);
+
+		void Aggressive_eat(Aggressive* c_obj);
+
+		void Aggressive_replicate(Aggressive* c_obj);
+
+		void Aggressive_age(Aggressive* c_obj);
+
+		//EVERYTHING ELSE
 
 		Plankton& return_plankton(int x, int y);
 
