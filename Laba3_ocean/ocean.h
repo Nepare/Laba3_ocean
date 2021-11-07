@@ -21,9 +21,7 @@ namespace ocean_life
 			height = height_inp;
 			scene = new char** [width];
 			for (int i = 0; i < width; i++)
-			{
 				scene[i] = new char* [height];
-			}
 
 			for (int i = 0; i < width; i++)
 			{
@@ -63,16 +61,83 @@ namespace ocean_life
 		int location[3];
 	};
 
+		class Plankton : public Organism
+
 		class Passive : public Organism
 	{
-
 	};
+
+			class Clownfish : public Passive
+		{
+		public:
+			Clownfish(string sex)
+			{
+				hp_max = 15; hp = hp_max;
+				food_max = 10; food = food_max;
+				moves = 3;
+				age = 0;
+				type = 'C';
+				if (sex == "Male") isMale = true;
+				if (sex == "Female") isMale = false;
+				if (sex == "Random") isMale = rand() % 2;
+			}
+		};
+
+			class Fugu : public Passive
+		{
+		public:
+			Fugu(string sex)
+			{
+				hp_max = 20; hp = hp_max;
+				food_max = 10; food = food_max;
+				moves = 3;
+				age = 0;
+				type = 'F';
+				if (sex == "Male") isMale = true;
+				if (sex == "Female") isMale = false;
+				if (sex == "Random") isMale = rand() % 2;
+			}
+		};
 
 		class Aggressive : public Organism
 	{
 	public:
 		int damage;
 	};
+
+			class Killerwhale : public Aggressive
+		{
+		public:
+			Killerwhale(string sex)
+			{
+				hp_max = 120; hp = hp_max;
+				food_max = 30; food = food_max;
+				moves = 4;
+				damage = 50;
+				age = 0;
+				type = 'K';
+				if (sex == "Male") isMale = true;
+				if (sex == "Female") isMale = false;
+				if (sex == "Random") isMale = rand() % 2;
+			}
+		};
+
+			class Shark : public Aggressive
+		{
+		public:
+			Shark(string sex)
+			{
+				hp_max = 150; hp = hp_max;
+				food_max = 25; food = food_max;
+				moves = 4;
+				damage = 40;
+				age = 0;
+				type = 'S';
+				if (sex == "Male") isMale = true;
+				if (sex == "Female") isMale = false;
+				if (sex == "Random") isMale = rand() % 2;
+			}
+		};
 
 		class Neutral : public Organism
 	{
@@ -86,7 +151,7 @@ namespace ocean_life
 		Whale(string sex)
 		{
 			hp_max = 300; hp = hp_max;
-			food_max = 300; food = food_max;
+			food_max = 35; food = food_max;
 			moves = 2;
 			age = 0;
 			type = 'W';
@@ -102,7 +167,7 @@ namespace ocean_life
 		Dolphin(string sex)
 		{
 			hp_max = 100; hp = hp_max;
-			food_max = 40; food = food_max;
+			food_max = 20; food = food_max;
 			moves = 5;
 			damage = 25;
 			age = 0;
@@ -112,74 +177,8 @@ namespace ocean_life
 			if (sex == "Random") isMale = rand() % 2;
 		}
 	};
-	
-			class Killerwhale : public Aggressive
-	{
-	public:
-		Killerwhale(string sex)
-		{
-			hp_max = 120; hp = hp_max;
-			food_max = 60; food = food_max;
-			moves = 4;
-			damage = 50;
-			age = 0;
-			type = 'K';
-			if (sex == "Male") isMale = true;
-			if (sex == "Female") isMale = false;
-			if (sex == "Random") isMale = rand() % 2;
-		}
-	};
-	
-			class Shark : public Aggressive
-	{
-	public:
-		Shark(string sex)
-		{
-			hp_max = 150; hp = hp_max;
-			food_max = 50; food = food_max;
-			moves = 4;
-			damage = 40;
-			age = 0;
-			type = 'S';
-			if (sex == "Male") isMale = true;
-			if (sex == "Female") isMale = false;
-			if (sex == "Random") isMale = rand() % 2;
-		}
-	};
 
-			class Clownfish : public Passive
-	{
-	public:
-		Clownfish(string sex)
-		{
-			hp_max = 15; hp = hp_max;
-			food_max = 10; food = food_max;
-			moves = 3;
-			age = 0;
-			type = 'C';
-			if (sex == "Male") isMale = true;
-			if (sex == "Female") isMale = false;
-			if (sex == "Random") isMale = rand() % 2;
-		}
-	};
 
-			class Fugu : public Passive
-	{
-	public:
-		Fugu(string sex)
-		{
-			hp_max = 20; hp = hp_max;
-			food_max = 10; food = food_max;
-			moves = 3;
-			age = 0;
-			type = 'F';
-			if (sex == "Male") isMale = true;
-			if (sex == "Female") isMale = false;
-			if (sex == "Random") isMale = rand() % 2;
-		}
-	};
-
-			class Plankton : public Organism
 	{
 	public:
 		Plankton()
@@ -203,6 +202,8 @@ namespace ocean_life
 		vector<Fugu> fish_fugu;
 		vector<Plankton> fish_plankton;
 		Plankton* p_extra = new Plankton();
+		Clownfish* c_extra = new Clownfish();
+		Fugu* c_extra = new Fugu();
 
 		int* find_empty_cell(bool isPlankton);
 
@@ -234,7 +235,7 @@ namespace ocean_life
 
 		void Neutral_replicate(Neutral* c_obj);
 
-		void Neutral_age(Neutral* c_obj);
+		void Neutral_age(Neutral* c_obj, int order);
 
 		//AGGRESSIVES
 
@@ -251,6 +252,14 @@ namespace ocean_life
 		//EVERYTHING ELSE
 
 		Plankton& return_plankton(int x, int y);
+
+		Clownfish& return_clownfish(int x, int y);
+
+		Fugu& return_fugu(int x, int y);
+
+		Dolphin& return_dolphin(int x, int y);
+
+		Whale& return_whale(int x, int y);
 
 		int empty_place(int x, int y, bool isPlankton);
 

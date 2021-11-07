@@ -6,8 +6,6 @@ using namespace std;
 using namespace ocean_life;
 
 
-
-
 int main()
 {
 	srand(time(0));
@@ -24,7 +22,7 @@ int main()
 		cout << "Move #" << move_count << endl;
 
 		char input = _getch();
-		if (input == '\033') return 0; //if you press ESC, the program ends
+		if (input == '\033') return 0; // if you press ESC, the program ends
 		ocean.Tick();
 	}
 }
