@@ -11,7 +11,7 @@ int main()
 	srand(time(0));
 	Ocean_master ocean(14, 5);
 
-	ocean.start_random_place(4, 4, 4, 4, 6, 4, 9);
+	ocean.start_random_place(4, 4, 4, 4, 7, 6, 9);
 	//						 W  D  K  S  C  F  P
 	// some fish that can fight, a little bit more defenseless clownfish, a lot of plankton 
 

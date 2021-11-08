@@ -126,7 +126,7 @@ namespace ocean_life
 			hp_max = 120; hp = hp_max;
 			food_max = 30; food = food_max;
 			moves = 4;
-			damage = 50;
+			damage = 15;
 			age = 0;
 			type = 'K';
 			side = 'A';
@@ -144,7 +144,7 @@ namespace ocean_life
 			hp_max = 150; hp = hp_max;
 			food_max = 25; food = food_max;
 			moves = 4;
-			damage = 40;
+			damage = 17;
 			age = 0;
 			type = 'S';
 			side = 'A';
@@ -210,7 +210,7 @@ namespace ocean_life
 		Plankton* p_extra = new Plankton();
 		Clownfish* cl_extra = new Clownfish("Random");
 		Fugu* f_extra = new Fugu("Random");
-		Dolphin* d_extra = new Dolphin("Random");
+		Dolphin * d_extra = new Dolphin("Random");
 		Whale* w_extra = new Whale("Random");
 
 		int* find_empty_cell(bool isPlankton);
@@ -247,13 +247,11 @@ namespace ocean_life
 
 		void Aggressive_move(Aggressive* c_obj);
 
-		void Aggressive_attack(Aggressive* c_obj);
-
 		void Aggressive_eat(Aggressive* c_obj);
 
 		void Aggressive_replicate(Aggressive* c_obj);
 
-		void Aggressive_age(Aggressive* c_obj);
+		void Aggressive_age(Aggressive* c_obj, int order);
 
 		//EVERYTHING ELSE
 
