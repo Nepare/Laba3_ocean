@@ -638,11 +638,13 @@ void Ocean_master::Passive_move(Passive* c_obj)
 		current_width = ocean_table->get_width(),
 		current_height = ocean_table->get_height();
 
-	//CHECKING IF PLANKTON IS RIGHT THERE
-	Plankton p_obj = return_plankton(x, y);
-	if (p_obj.location[0] == x && p_obj.location[1] == y)
+	if (c_obj->food <= 0.9 * c_obj->food_max) // CHECKING IF THE PASSIVE IS NOT SATURATED
 	{
-		return;
+		Plankton p_obj = return_plankton(x, y); 	//CHECKING IF PLANKTON IS RIGHT THERE
+		if (p_obj.location[0] == x && p_obj.location[1] == y)
+		{
+			return;
+		}
 	}
 
 	//MOVING PHASE
@@ -712,6 +714,8 @@ void Ocean_master::Passive_move(Passive* c_obj)
 
 void Ocean_master::Passive_eat(Passive* c_obj)
 {
+	if (c_obj->food > 0.9 * c_obj->food_max) return; //if the passive is saturated (not hungry), it will not eat this turn 
+
 	int x = c_obj->location[0], y = c_obj->location[1], index = 0;
 	Plankton p_obj = return_plankton(x, y);
 	int x_plankton = p_obj.location[0],
@@ -857,25 +861,7 @@ void Ocean_master::Neutral_move(Neutral* c_obj)
 		if (fugu_obj.location[0] == x && fugu_obj.location[1] == y) return;
 		if (clownfish_obj.location[0] == x && clownfish_obj.location[1] == y) return;
 	}
-	// ÏÎ×ÅÌÓ Ó ÒÅÁß ÄÅËÜÔÈÍÛ ÅËÈ ÔÓÃÓ È ÊËÎÓÍÎÂ? ÎÍÈ ÆÅ ÍÅ ÄÎËÆÍÛ ÁÛËÈ ÈÕ ÅÑÒÜ, ÏÎÊÀ ÍÅ ÃÎËÎÄÍÛÅ
-
-	// Disabled because aggresive mobs not realised
-
-	//if (c_obj->food <= c_obj->food_max * 0.35)			// check for mobs here and attack them if possible
-	//{
-	//	Whale whale_obj = return_whale(x, y);
-	//	Killerwhale killerwhale_obj = return_killerwhale(x, y);
-	//	Shark shark_obj = return_shark(x, y);
-	//	if ((plankton_obj.location[0] == x && plankton_obj.location[1] == y) ||
-	//		(clownfish_obj->location[0] == x && clownfish_obj->location[1] == y) ||
-	//		(fugu_obj->location[0] == x && fugu_obj->location[1] == y) ||
-	//		(whale_obj->location[0] == x && whale_obj->location[1] == y) ||
-	//		(killertwhale_obj->location[0] == x && whale_obj->location[1] == y) ||
-	//		(shark_obj->location[0] == x && shark_obj->location[1] == y))
-	//		return;
-	//}
-
-
+	
 	// MOVING PHASE
 
 	while (variations < current_width * current_height)

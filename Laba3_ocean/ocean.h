@@ -235,8 +235,6 @@ namespace ocean_life
 
 		void Neutral_move(Neutral* c_obj);
 
-		void Neutral_attack(Neutral* c_obj);
-
 		void Neutral_eat(Neutral* c_obj);
 
 		void Neutral_replicate(Neutral* c_obj);
