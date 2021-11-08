@@ -208,8 +208,10 @@ namespace ocean_life
 		vector<Fugu> fish_fugu;
 		vector<Plankton> fish_plankton;
 		Plankton* p_extra = new Plankton();
-		Clownfish* cl_extra = new Clownfish("random");
-		Fugu* f_extra = new Fugu("random");
+		Clownfish* cl_extra = new Clownfish("Random");
+		Fugu* f_extra = new Fugu("Random");
+		Dolphin* d_extra = new Dolphin("Random");
+		Whale* w_extra = new Whale("Random");
 
 		int* find_empty_cell(bool isPlankton);
 

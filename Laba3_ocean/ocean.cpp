@@ -1115,6 +1115,24 @@ Fugu& Ocean_master::return_fugu(int x1, int y1)
 	return *f_extra;
 }
 
+Dolphin& Ocean_master::return_dolphin(int x1, int y1)
+{
+	for (int i = 0; i < fish_dolphin.size(); i++)
+		if (fish_dolphin[i].location[0] == x1 && fish_dolphin[i].location[1] == y1)
+			return fish_dolphin[i];
+	d_extra->location[0] = -1; d_extra->location[1] = -1; d_extra->location[2] = -1;
+	return *d_extra;
+}
+
+Whale& Ocean_master::return_whale(int x1, int y1)
+{
+	for (int i = 0; i < fish_whale.size(); i++)
+		if (fish_whale[i].location[0] == x1 && fish_whale[i].location[1] == y1)
+			return fish_whale[i];
+	w_extra->location[0] = -1; w_extra->location[1] = -1; w_extra->location[2] = -1;
+	return *w_extra;
+}
+
 int Ocean_master::empty_place(int x1, int y1, bool isPlankton)
 {
 	if (x1 < 0 || y1 < 0 || x1 >= ocean_table->get_width() || y1 >= ocean_table->get_height())
