@@ -70,7 +70,7 @@ void Ocean_master::Tick()
 		clownfish_count = fish_clownfish.size(),
 		fugu_count = fish_fugu.size(),
 		whale_count = fish_whale.size(),
-		dolphin_count = fish_dolphin.size(),
+		dolphin_count = fish_dolphin.size(),		
 		shark_count = fish_shark.size(),
 		killerwhale_count = fish_killerwhale.size();
 
@@ -165,13 +165,16 @@ void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_
 		if (i % 2 != 0)
 		{
 			Whale fish_whale_obj("Male");
+			fish_whale_obj.id = whale_number;
 			fish_whale.push_back(fish_whale_obj);
 		}
 		else
 		{
 			Whale fish_whale_obj("Female");
+			fish_whale_obj.id = whale_number;
 			fish_whale.push_back(fish_whale_obj);
 		}
+		whale_number++;
 	}
 
 	for (int i = 1; i <= d_c; i++)
@@ -179,13 +182,16 @@ void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_
 		if (i % 2 != 0)
 		{
 			Dolphin fish_dolphin_obj("Male");
+			fish_dolphin_obj.id = dolphin_number;
 			fish_dolphin.push_back(fish_dolphin_obj);
 		}
 		else
 		{
 			Dolphin fish_dolphin_obj("Female");
+			fish_dolphin_obj.id = dolphin_number;
 			fish_dolphin.push_back(fish_dolphin_obj);
 		}
+		dolphin_number++;
 	}
 
 	for (int i = 1; i <= k_c; i++)
@@ -193,13 +199,16 @@ void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_
 		if (i % 2 != 0)
 		{
 			Killerwhale fish_killerwhale_obj("Male");
+			fish_killerwhale_obj.id = killerwhale_number;
 			fish_killerwhale.push_back(fish_killerwhale_obj);
 		}
 		else
 		{
 			Killerwhale fish_killerwhale_obj("Female");
+			fish_killerwhale_obj.id = killerwhale_number;
 			fish_killerwhale.push_back(fish_killerwhale_obj);
 		}
+		killerwhale_number++;
 	}
 
 	for (int i = 1; i <= s_c; i++)
@@ -207,13 +216,16 @@ void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_
 		if (i % 2 != 0)
 		{
 			Shark fish_shark_obj("Male");
+			fish_shark_obj.id = shark_number;
 			fish_shark.push_back(fish_shark_obj);
 		}
 		else
 		{
 			Shark fish_shark_obj("Female");
+			fish_shark_obj.id = shark_number; 
 			fish_shark.push_back(fish_shark_obj);
 		}
+		shark_number++;
 	}
 
 	for (int i = 1; i <= c_c; i++)
@@ -221,13 +233,16 @@ void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_
 		if (i % 2 != 0)
 		{
 			Clownfish fish_clownfish_obj("Male");
+			fish_clownfish_obj.id = clownfish_number; 
 			fish_clownfish.push_back(fish_clownfish_obj);
 		}
 		else
 		{
 			Clownfish fish_clownfish_obj("Female");
+			fish_clownfish_obj.id = clownfish_number; 
 			fish_clownfish.push_back(fish_clownfish_obj);
 		}
+		clownfish_number++;
 	}
 
 	for (int i = 0; i < f_c; i++)
@@ -235,18 +250,23 @@ void Ocean_master::start_random_place(int w_c, int d_c, int k_c, int s_c, int c_
 		if (i % 2)
 		{
 			Fugu fish_fugu_obj("Male");
+			fish_fugu_obj.id = fugu_number; 
 			fish_fugu.push_back(fish_fugu_obj);
 		}
 		else
 		{
 			Fugu fish_fugu_obj("Female");
+			fish_fugu_obj.id = fugu_number; 
 			fish_fugu.push_back(fish_fugu_obj);
 		}
+		fugu_number++;
 	}
 
 	for (int i = 0; i < p_c; i++)
 	{
 		Plankton fish_plankton_obj;
+		fish_plankton_obj.id = plankton_number;
+		plankton_number++;
 		fish_plankton.push_back(fish_plankton_obj);
 	}
 
@@ -446,6 +466,7 @@ void Ocean_master::Plankton_replicate(Plankton* p_obj)
 				p_child.location[0] = x;
 				p_child.location[1] = y - 1;
 				p_child.location[2] = index_plankton;
+				p_child.id = plankton_number; plankton_number++;
 				fish_plankton.push_back(p_child);
 				ocean_table->scene[p_child.location[0]][p_child.location[1]][p_child.location[2]] = 'P';
 				break;
@@ -683,6 +704,7 @@ void Ocean_master::Passive_replicate(Passive* c_obj)
 						{
 							c_obj->food -= c_obj->food_max * 0.3;
 							Clownfish c_child("Random");
+							c_child.id = clownfish_number; clownfish_number++;
 							c_child.location[0] = x1;
 							c_child.location[1] = y1;
 							c_child.location[2] = replica_result;
@@ -713,6 +735,7 @@ void Ocean_master::Passive_replicate(Passive* c_obj)
 						{
 							c_obj->food -= c_obj->food_max * 0.3;
 							Fugu c_child("Random");
+							c_child.id = fugu_number; fugu_number++;
 							c_child.location[0] = x1;
 							c_child.location[1] = y1;
 							c_child.location[2] = replica_result;
@@ -924,6 +947,7 @@ void Ocean_master::Neutral_replicate(Neutral* c_obj)
 						{
 							c_obj->food -= c_obj->food_max * 0.5;
 							Dolphin c_child("Random");
+							c_child.id = dolphin_number; dolphin_number++;
 							c_child.location[0] = x1;
 							c_child.location[1] = y1;
 							c_child.location[2] = replica_result;
@@ -955,6 +979,7 @@ void Ocean_master::Neutral_replicate(Neutral* c_obj)
 						{
 							c_obj->food -= c_obj->food_max * 0.6;
 							Whale c_child("Random");
+							c_child.id = whale_number; whale_number++;
 							c_child.location[0] = x1;
 							c_child.location[1] = y1;
 							c_child.location[2] = replica_result;
@@ -1232,6 +1257,7 @@ void Ocean_master::Aggressive_replicate(Aggressive* c_obj)
 						{
 							c_obj->food -= c_obj->food_max * 0.5;
 							Shark c_child("Random");
+							c_child.id = shark_number; shark_number++;
 							c_child.location[0] = x1;
 							c_child.location[1] = y1;
 							c_child.location[2] = replica_result;
@@ -1263,6 +1289,7 @@ void Ocean_master::Aggressive_replicate(Aggressive* c_obj)
 						{
 							c_obj->food -= c_obj->food_max * 0.6;
 							Killerwhale c_child("Random");
+							c_child.id = killerwhale_number; killerwhale_number++;
 							c_child.location[0] = x1;
 							c_child.location[1] = y1;
 							c_child.location[2] = replica_result;
@@ -1293,6 +1320,7 @@ void Ocean_master::Aggressive_age(Aggressive* c_obj, int order)
 			fish_killerwhale.erase(fish_killerwhale.begin() + order);
 	}
 }
+
 
 // UTILITY
 

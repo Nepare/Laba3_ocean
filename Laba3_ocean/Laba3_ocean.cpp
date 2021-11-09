@@ -17,14 +17,16 @@ int main()
 		s = 4, //shark
 		c = 8, //clownfish
 		f = 8, //fugu
-		p = 9; //plankton
+		p = 10; //plankton
 
-	cout << "FILE POSITIONING\t\t---> TAB\n";
+	for (int i = 0; i < 45; i++) cout << "-";
+	cout << "\nFILE POSITIONING\t\t---> TAB\n";
 	for (int i = 0; i < 45; i++) cout << "-";
 	cout << "\nCUSTOM POSITIONING\t\t---> SPACE\n";
 	for (int i = 0; i < 45; i++) cout << "-";
-	cout << "\nDEFAULT POSITIONING (14x5)\t---> ENTER\n4 whales, 4 dolphins,\n4 killerwhales, 4 sharks,\n8 clownfish, 8 fugu, 8 plankton\n";
-	
+	cout << "\nDEFAULT POSITIONING (14x5)\t---> ENTER\n4 whales, 4 dolphins,\n4 killerwhales, 4 sharks,\n8 clownfish, 8 fugu, 10 plankton\n";
+	for (int i = 0; i < 45; i++) cout << "-";
+
 	input = _getch();
 	system("cls");
 	if (input == ' ') //SPACE

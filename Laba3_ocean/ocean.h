@@ -200,13 +200,13 @@ namespace ocean_life
 	{
 		Ocean_field* ocean_table;
 
-		vector<Whale> fish_whale;
-		vector<Dolphin> fish_dolphin;
-		vector<Killerwhale> fish_killerwhale;
-		vector<Shark> fish_shark;
-		vector<Clownfish> fish_clownfish;
-		vector<Fugu> fish_fugu;
-		vector<Plankton> fish_plankton;
+		vector<Whale> fish_whale; int whale_number;
+		vector<Dolphin> fish_dolphin; int dolphin_number;
+		vector<Killerwhale> fish_killerwhale; int killerwhale_number;
+		vector<Shark> fish_shark; int shark_number;
+		vector<Clownfish> fish_clownfish; int clownfish_number;
+		vector<Fugu> fish_fugu; int fugu_number;
+		vector<Plankton> fish_plankton; int plankton_number;
 		Plankton* p_extra = new Plankton();
 		Clownfish* cl_extra = new Clownfish("Random");
 		Fugu* f_extra = new Fugu("Random");
@@ -272,6 +272,13 @@ namespace ocean_life
 		{
 			srand(time(0));
 			ocean_table = new Ocean_field(width_inp, height_inp);
+			whale_number = 0;
+			dolphin_number = 0;
+			killerwhale_number = 0;
+			shark_number = 0;
+			clownfish_number = 0;
+			fugu_number = 0;
+			plankton_number = 0;
 		}
 
 		void Tick();
