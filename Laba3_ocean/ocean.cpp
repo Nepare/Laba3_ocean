@@ -1111,7 +1111,14 @@ void Ocean_master::Aggressive_eat(Aggressive* c_obj)
 					c_obj->food += c_obj->food_max - c_obj->food;
 				else
 					c_obj->food += c_obj->damage;
-				dolphin_obj.hp -= c_obj->damage;
+				for (int i = 0; i < fish_dolphin.size(); i++)
+				{
+					if (fish_dolphin[i].location[0] == x_dolphin && fish_dolphin[i].location[1] == y_dolphin)
+					{
+						fish_dolphin[i].hp -= c_obj->damage;
+						return;
+					}
+				}
 			}
 		}
 		if (x_whale == x && y_whale == y)
@@ -1123,11 +1130,11 @@ void Ocean_master::Aggressive_eat(Aggressive* c_obj)
 				else
 					c_obj->food += c_obj->damage;
 				ocean_table->scene[x_whale][y_whale][whale_obj.location[2]] = ' ';
-				for (int i = 0; i < fish_dolphin.size(); i++)
+				for (int i = 0; i < fish_whale.size(); i++)
 				{
-					if (fish_dolphin[i].location[0] == x_whale && fish_dolphin[i].location[1] == y_whale)
+					if (fish_whale[i].location[0] == x_whale && fish_whale[i].location[1] == y_whale)
 					{
-						fish_dolphin.erase(fish_dolphin.begin() + i);
+						fish_whale.erase(fish_whale.begin() + i);
 						return;
 					}
 				}
@@ -1138,7 +1145,14 @@ void Ocean_master::Aggressive_eat(Aggressive* c_obj)
 					c_obj->food += c_obj->food_max - c_obj->food;
 				else
 					c_obj->food += c_obj->damage;
-				whale_obj.hp -= c_obj->damage;
+				for (int i = 0; i < fish_whale.size(); i++)
+				{
+					if (fish_whale[i].location[0] == x_whale && fish_whale[i].location[1] == y_whale)
+					{
+						fish_whale[i].hp -= c_obj->damage;
+						return;
+					}
+				}
 			}
 		}
 	}
@@ -1266,7 +1280,7 @@ void Ocean_master::Aggressive_age(Aggressive* c_obj, int order)
 {
 	c_obj->age++;
 	c_obj->hp--;
-	c_obj->food--;
+	c_obj->food -= 2;
 
 	if (c_obj->food <= 0)
 		c_obj->hp -= 3;

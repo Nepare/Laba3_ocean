@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <conio.h>
+#include <fstream>
 #include "ocean.h"
 
 using namespace std;
@@ -8,13 +9,44 @@ using namespace ocean_life;
 
 int main()
 {
+	char input;
+	int x_size = 14, y_size = 5;
+	int w = 4, //whale
+		d = 4, //dolphin
+		k = 4, //killerwhale
+		s = 4, //shark
+		c = 8, //clownfish
+		f = 8, //fugu
+		p = 9; //plankton
+
+	cout << "FILE POSITIONING\t\t---> TAB\n";
+	for (int i = 0; i < 45; i++) cout << "-";
+	cout << "\nCUSTOM POSITIONING\t\t---> SPACE\n";
+	for (int i = 0; i < 45; i++) cout << "-";
+	cout << "\nDEFAULT POSITIONING (14x5)\t---> ENTER\n4 whales, 4 dolphins,\n4 killerwhales, 4 sharks,\n8 clownfish, 8 fugu, 8 plankton\n";
+	
+	input = _getch();
+	system("cls");
+	if (input == ' ') //SPACE
+	{
+		cout << "Enter the game table size (AxB): ";
+		cin >> x_size >> y_size;
+		cout << "Enter organism numbers (W->D->K->S->C->F->P): ";
+		cin >> w >> d >> k >> s >> c >> f >> p;
+	}
+	if (input == '\011') //TAB
+	{
+		fstream file("start_pos.txt");
+		file >> x_size >> y_size >> w >> d >> k >> s >> c >> f >> p;
+		file.close();
+	}
+	if (input == '\033') return 0; //ESC
+
 	srand(time(0));
-	Ocean_master ocean(14, 5);
+	Ocean_master ocean(x_size, y_size);
 
-	ocean.start_random_place(4, 4, 4, 4, 7, 6, 9);
-	//						 W  D  K  S  C  F  P
-	// some fish that can fight, a little bit more defenseless clownfish, a lot of plankton 
-
+	system("cls");
+	ocean.start_random_place(w, d, k, s, c, f, p);
 	ocean.Show();
 
 	int move_count = 0;
@@ -23,7 +55,7 @@ int main()
 		move_count++;
 		cout << "Move #" << move_count << endl;
 
-		char input = _getch();
+		input = _getch();
 		if (input == '\033') return 0; // if you press ESC, the program ends
 		ocean.Tick();
 	}
