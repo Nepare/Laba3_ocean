@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <conio.h>
 #include <string>
 
 using namespace std;

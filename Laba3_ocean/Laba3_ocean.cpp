@@ -42,7 +42,29 @@ int main()
 	}
 	if (input == '\011') // TAB
 	{
-		fstream file("start_pos.txt");
+		string filename;
+		fstream file;
+		int test;
+		while (true)
+		{
+			cout << "Enter filename: ";
+			cin >> filename;
+			try
+			{
+				file.open(filename);
+				if (!file.is_open()) 
+				{
+					throw 1;
+				}
+				break;
+			}
+			catch (int)
+			{
+				system("cls");
+				cout << "File not found!\n";
+			}
+		}
+
 		file >> x_size >> y_size >> w >> d >> k >> s >> c >> f >> p;
 		file.close();
 	}
