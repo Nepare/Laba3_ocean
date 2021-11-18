@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <string>
 
 using namespace std;
 
@@ -53,26 +52,18 @@ namespace ocean_life
 		}
 	};
 
+
 	class Organism
 	{
 	protected:
-		string name;
-		char type, side;
+		char type;
 		int age, id, hp, hp_max, food, food_max, moves;
 		bool isMale;
-		int location[3];
+		int location[3]; //3 coordinates - x, y, index
 	public:
-		string get_name()
-		{
-			return name;
-		}
 		char get_type()
 		{
 			return type;
-		}
-		char get_side()
-		{
-			return side;
 		}
 		int get_age()
 		{
@@ -110,17 +101,9 @@ namespace ocean_life
 		{
 			return location[index];
 		}
-		void set_name(string inp_name)
-		{
-			this->name = inp_name;
-		}
 		void set_type(char inp_type)
 		{
 			this->type = inp_type;
-		}
-		void set_side(char inp_side)
-		{
-			this->side = inp_side;
 		}
 		void set_age(int inp_age)
 		{
@@ -387,7 +370,7 @@ namespace ocean_life
 
 		Whale& return_whale(int x, int y);
 
-		int empty_place(int x, int y, bool isPlankton);
+		int empty_place(int x, int y, bool isPlankton); //checking what cell is available for moving into
 
 	public:
 		Ocean_master(int width_inp, int height_inp)
